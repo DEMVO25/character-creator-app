@@ -1,0 +1,309 @@
+<resources>
+    <string name="app_name">Character Creator App</string>
+    <string name="race_label">Race (Type or Choose)</string>
+    <string name="character_creation_label">Character Creation</string>
+    <string name="next_button_label">Next</string>
+    <string name="back_button_label">Back</string>
+    <string name="home_button_label">Home</string>
+    <string name="select_dice">Select Die Type:</string>
+    <string name="features_placeholder">No features recorded yet. Use the editor to add racial traits, class features, or special abilities.</string>
+    <string name="new_item_label">Add New Item</string>
+    <string name="item_name">Item Name</string>
+    <string name="complete_level_up_button_label">Complete Level Up</string>
+    <string name="level_up_label">Level Up Hero</string>
+    <string name="update_level_up_label">Update your stats and abilities</string>
+    <string name="main_info_level_up_label">Core Combat Stats</string>
+    <string name="level_level_up_label">Level</string>
+    <string name="max_hp_level_up_label">Max HP</string>
+    <string name="speed_level_up_label">Speed</string>
+    <string name="initiative_level_up_label">Initiative</string>
+    <string name="proficiencies_level_up_label">Proficiencies</string>
+    <string name="armor_proficiencies_level_up_label">Armor Proficiencies</string>
+    <string name="armor_proficiencies_placeholder_level_up_label">Light Armor, Medium Armor…</string>
+    <string name="weapon_proficiencies_level_up_label">Weapon Proficiencies</string>
+    <string name="weapon_proficiencies_placeholder_level_up_label">Simple Weapons, Martial Weapons…</string>
+    <string name="tools_proficiencies_level_up_label">Tool Proficiencies</string>
+    <string name="tools_proficiencies_placeholder_level_up_label">Thieves\' Tools, Alchemist\'s Supplies…</string>
+    <string name="feature_traits_level_up_label">Record your new class features, racial traits, or feats.</string>
+    <string name="skill_proficiencies_level_up_label">Skill Proficiencies</string>
+    <string name="skill_proficiencies_description_level_up_label">Select skills gained from your class or background. Modifiers will update based on your stats.</string>
+    <string name="cantrips_level_up_label">Cantrips</string>
+    <string name="spells_level_up_label">Lvl</string>
+    <string name="known_cantrips_level_up">Known Cantrips</string>
+    <string name="level">Level</string>
+    <string name="spells">Spells</string>
+    <string name="spells_placeholder_level_up">Fireball, Haste, Counterspell…</string>
+    <string name="ability_scores_title">Ability Scores</string>
+    <string name="saving_throws_title">Saving Throw Proficiencies</string>
+
+    <string name="stat_label_str">STR</string>
+    <string name="stat_label_dex">DEX</string>
+    <string name="stat_label_con">CON</string>
+    <string name="stat_label_int">INT</string>
+    <string name="stat_label_wis">WIS</string>
+    <string name="stat_label_cha">CHA</string>
+
+    <string name="stat_full_strength">Strength</string>
+    <string name="stat_full_dexterity">Dexterity</string>
+    <string name="stat_full_constitution">Constitution</string>
+    <string name="stat_full_intelligence">Intelligence</string>
+    <string name="stat_full_wisdom">Wisdom</string>
+    <string name="stat_full_charisma">Charisma</string>
+
+    <string name="proficient_label">Proficient</string>
+
+    <string name="dice_amount_label">Amount: </string>
+    <string name="dice_total_label">Total: %1$d</string>
+    <string name="dice_sides_label">d%1$d</string>
+    <string name="dice_none_modifier">None</string>
+
+
+    <string name="main_info_label">Main info</string>
+    <string name="stats_saving_throws_label">Stats &amp; Saving Throws</string>
+    <string name="skills_label">Skills</string>
+    <string name="personality_label">Personality</string>
+    <string name="weapons_label">Weapons</string>
+    <string name="spellbook_label">Spellbook</string>
+    <string name="dice_roller_label">Dice Roller</string>
+    <string name="inventory_label">Inventory</string>
+    <string name="feature_traits_label">Features &amp; Traits</string>
+
+    <string name="character_menu_title">Character Menu</string>
+    <string name="open_menu_description">Open Menu</string>
+    <string name="edit_character_description">Edit Character</string>
+    <string name="level_indicator_format">Level %1$d</string>
+    <string name="weapons_icon_description">Weapons</string>
+
+
+    <string name="inventory_type_label">Type</string>
+    <string name="inventory_stat_label">Stat</string>
+    <string name="inventory_value_label">Val</string>
+    <string name="inventory_add_effect_desc">Add Effect</string>
+    <string name="inventory_add_to_bag">Add to Bag</string>
+    <string name="inventory_carried_items">Carried Items</string>
+    <string name="inventory_empty_state">Your inventory is empty.</string>
+
+    <string name="inventory_discard_title">Discard Item</string>
+    <string name="inventory_discard_confirm">Do you want to throw away %1$s?</string>
+    <string name="inventory_discard_action">Discard</string>
+    <string name="inventory_keep_action">Keep it</string>
+
+    <string name="personality_traits_label">Personality Traits</string>
+    <string name="personality_ideals_label">Ideals</string>
+    <string name="personality_bonds_label">Bonds</string>
+    <string name="personality_flaws_label">Flaws</string>
+
+    <string name="personality_traits_placeholder">My character\'s unique quirks and habits.</string>
+    <string name="personality_ideals_placeholder">The beliefs that drive my character.</string>
+    <string name="personality_bonds_placeholder">The people, places, or items my character cares about.</string>
+    <string name="personality_flaws_placeholder">The weaknesses or vices that challenge my character.</string>
+
+    <string name="skills_title">Skills</string>
+    <string name="proficiency_bonus_format">Proficiency Bonus: +%1$d</string>
+
+    <string name="skill_athletics">Athletics</string>
+    <string name="skill_acrobatics">Acrobatics</string>
+    <string name="skill_sleight_of_hand">Sleight of Hand</string>
+    <string name="skill_stealth">Stealth</string>
+    <string name="skill_arcana">Arcana</string>
+    <string name="skill_history">History</string>
+    <string name="skill_investigation">Investigation</string>
+    <string name="skill_nature">Nature</string>
+    <string name="skill_religion">Religion</string>
+    <string name="skill_animal_handling">Animal Handling</string>
+    <string name="skill_insight">Insight</string>
+    <string name="skill_medicine">Medicine</string>
+    <string name="skill_perception">Perception</string>
+    <string name="skill_survival">Survival</string>
+    <string name="skill_deception">Deception</string>
+    <string name="skill_intimidation">Intimidation</string>
+    <string name="skill_performance">Performance</string>
+    <string name="skill_persuasion">Persuasion</string>
+
+    <string name="spells_ability_label">Ability</string>
+    <string name="spells_dc_label">Spell DC</string>
+    <string name="spells_attack_label">Attack</string>
+    <string name="spells_cantrips_label">Cantrips</string>
+    <string name="spells_level_tab_format">%1$s Lvl</string>
+    <string name="spells_level_slots_format">Level %1$d Slots</string>
+    <string name="spells_edit_max">Edit Max</string>
+    <string name="spells_no_spells">No spells recorded.</string>
+    <string name="spells_known_cantrips">Known Cantrips</string>
+    <string name="spells_known_level_format">Level %1$d Spells</string>
+
+    <string name="spells_dialog_max_slots">Max Slots for Level %1$d</string>
+    <string name="spells_dialog_dc_bonus">Spell DC Bonus</string>
+    <string name="spells_dialog_atk_bonus">Spell Attack Bonus</string>
+    <string name="spells_dialog_bonus_hint">Bonus (e.g. from items)</string>
+    <string name="spells_save">Save</string>
+    <string name="spells_cancel">Cancel</string>
+    <string name="spells_ability_title">Ability</string>
+    <string name="spells_edit_max_label">Edit Max</string>
+    <string name="spells_level_slots_title">Level %1$d Slots</string>
+    <string name="spells_save_button">Save</string>
+    <string name="spells_cancel_button">Cancel</string>
+    <string name="spells_bonus_field_label">Bonus (e.g. from items)</string>
+
+    <string name="weapons_discard_title">Discard Weapon?</string>
+    <string name="weapons_discard_confirm">Are you sure you want to remove %1$s from your arsenal?</string>
+    <string name="weapons_unnamed_weapon">this weapon</string>
+    <string name="weapons_remove_action">Remove</string>
+    <string name="weapons_cancel_action">Cancel</string>
+
+    <string name="weapons_arsenal_title">Weapon Arsenal</string>
+    <string name="weapons_add_button">Add Weapon</string>
+
+    <string name="weapons_table_name">Weapon Name</string>
+    <string name="weapons_table_atk">Atk</string>
+    <string name="weapons_table_damage">Damage</string>
+    <string name="weapons_table_stat">Stat</string>
+
+    <string name="weapons_empty_state">Your scabbard is empty.\nAdd a weapon to start the adventure!</string>
+    <string name="weapons_custom_weapon">Custom Weapon</string>
+
+    <string name="home_welcome_title">Welcome to the Character App</string>
+    <string name="home_new_character_desc">New Character</string>
+
+    <string name="home_delete_title">Delete Hero?</string>
+    <string name="home_delete_confirm">Are you sure you want to delete %1$s? This action cannot be undone.</string>
+    <string name="home_delete_action">Delete</string>
+    <string name="home_cancel_action">Cancel</string>
+
+    <string name="home_unnamed_hero">Unnamed Hero</string>
+    <string name="home_char_info_format">%1$s • %2$s</string>
+    <string name="home_level_format">Lvl %1$d</string>
+    <string name="home_delete_icon_desc">Delete Character</string>
+
+    <string name="levelup_features_label">Features &amp; Traits Description</string>
+    <string name="levelup_features_placeholder">e.g., Second Wind, Darkvision, Lucky feat…</string>
+    <string name="levelup_auto_save_warning">Changes are saved automatically</string>
+
+    <string name="modifier_label">Modifier: %1$s</string>
+    <string name="ability_class_format">Class: %1$s</string>
+    <string name="ability_use_recommended">Use Recommended Stats</string>
+
+    <string name="class_option_title">Choose Your Class</string>
+    <string name="class_option_description">Class options determine your abilities</string>
+
+    <string name="class_barbarian">Barbarian</string>
+    <string name="class_bard">Bard</string>
+    <string name="class_cleric">Cleric</string>
+    <string name="class_druid">Druid</string>
+    <string name="class_fighter">Fighter</string>
+    <string name="class_monk">Monk</string>
+    <string name="class_paladin">Paladin</string>
+    <string name="class_ranger">Ranger</string>
+    <string name="class_rogue">Rogue</string>
+    <string name="class_sorcerer">Sorcerer</string>
+    <string name="class_warlock">Warlock</string>
+    <string name="class_wizard">Wizard</string>
+
+
+    <string name="languages_title">Select Languages</string>
+    <string name="languages_description">Choose languages your character can speak</string>
+
+
+    <string name="class_details_title">Class Details</string>
+    <string name="hit_die_label">Hit Die: %1$s</string>
+    <string name="armor_label">Armor</string>
+    <string name="weapons_label_detail">Weapons</string>
+    <string name="saving_throws_label">Saving Throws</string>
+    <string name="tools_label">Tools</string>
+    <string name="none_label">None</string>
+
+    <string name="creation_subtitle">Define your hero\'s origins</string>
+    <string name="character_name_label">Character Name</string>
+    <string name="alignment_label">Choose Alignment</string>
+    <string name="background_label">Character Background</string>
+
+    <string name="alignment_lawful_good">Lawful Good</string>
+    <string name="alignment_neutral_good">Neutral Good</string>
+    <string name="alignment_chaotic_good">Chaotic Good</string>
+    <string name="alignment_lawful_neutral">Lawful Neutral</string>
+    <string name="alignment_true_neutral">True Neutral</string>
+    <string name="alignment_chaotic_neutral">Chaotic Neutral</string>
+    <string name="alignment_lawful_evil">Lawful Evil</string>
+    <string name="alignment_neutral_evil">Neutral Evil</string>
+    <string name="alignment_chaotic_evil">Chaotic Evil</string>
+
+    <string name="race_human">Human</string>
+    <string name="race_elf">Elf</string>
+    <string name="race_dwarf">Dwarf</string>
+    <string name="race_halfling">Halfling</string>
+    <string name="race_dragonborn">Dragonborn</string>
+    <string name="race_tiefling">Tiefling</string>
+    <string name="race_gnome">Gnome</string>
+    <string name="race_half_orc">Half-Orc</string>
+
+    <string name="equipment_title">Equipment &amp; Armor</string>
+    <string name="armor_class_label">Armor Class</string>
+    <string name="item_name_hint">Item Name</string>
+    <string name="effect_type_label">Type</string>
+    <string name="effect_value_label">Val</string>
+    <string name="stat_label">Stat</string>
+    <string name="add_to_inventory_button">Add to Inventory</string>
+    <string name="your_items_header">Your Items</string>
+    <string name="delete_item_confirm_title">Delete Item?</string>
+    <string name="delete_item_confirm_text">Delete \'%1$s\' from your bag?</string>
+    <string name="delete_button">Delete</string>
+    <string name="cancel_button">Cancel</string>
+
+    <string name="effect_ac_bonus">AC Bonus</string>
+    <string name="effect_stat_bonus">Stat Bonus</string>
+
+    <string name="feature_traits_description">Record racial traits, class features, or special talents here.</string>
+    <string name="feature_traits_field_label">Describe your features</string>
+    <string name="feature_traits_field_placeholder">Example: Darkvision, Sneak Attack, Lucky…</string>
+
+    <string name="character_personality_title">Character Personality</string>
+
+    <string name="available_skills_title">Available Skills</string>
+    <string name="skill_mod_label">Mod: %1$d</string>
+
+    <string name="spells_cantrips_title">Spells &amp; Cantrips</string>
+    <string name="spells_starting_magic_desc">Add your character\'s starting magic</string>
+    <string name="spells_cantrips_field_label">Cantrips (0 Level)</string>
+    <string name="spells_cantrips_placeholder">e.g., Fire Bolt, Mage Hand…</string>
+    <string name="spells_lvl1_field_label">1st Level Spells</string>
+    <string name="spells_lvl1_placeholder">e.g., Magic Missile, Shield…</string>
+
+    <string name="weapon_header_name_type">Name/Type</string>
+    <string name="weapon_header_atk">Atk</string>
+
+    <string name="weapon_header_ability">Abil</string>
+    <string name="weapon_properties_placeholder">Properties…</string>
+
+    <string name="weapon_name_placeholder">Name</string>
+    <string name="weapon_type_select">Select Type</string>
+    <string name="weapon_damage_placeholder">1d8</string>
+    <string name="weapon_damage_type_placeholder">Type</string>
+    <string name="weapon_ability_placeholder">STR</string>
+
+    <string name="weapon_remove_title">Remove Weapon</string>
+    <string name="weapon_remove_confirm">Are you sure you want to remove %1$s?</string>
+
+    <string name="hit_points_label">Hit Points</string>
+    <string name="death_saves_title">Death Saving Throws</string>
+    <string name="death_saves_success">Successes</string>
+    <string name="death_saves_failure">Failures</string>
+    <string name="death_saves_reset">Reset Death Saves</string>
+    <string name="background_info_title">Background Info</string>
+    <string name="proficiencies_languages_title">Proficiencies &amp; Languages</string>
+
+    <string name="stat_ac">AC</string>
+    <string name="stat_init">Init</string>
+    <string name="stat_speed_format">%1$sft</string>
+    <string name="hp_bar_heal_button_label">Heal</string>
+    <string name="label_alignment">Alignment</string>
+    <string name="label_background">Background</string>
+    <string name="label_race">Race</string>
+    <string name="label_class_lvl">Class (Lvl %1$d)</string>
+    <string name="label_armor">Armor</string>
+    <string name="label_weapons">Weapons</string>
+    <string name="label_tools">Tools</string>
+    <string name="label_languages">Languages</string>
+    <string name="none_value">None</string>
+    <string name="default_language">Common</string>
+
+
+</resources>
