@@ -47,11 +47,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.character_creator_app.R
 import com.example.character_creator_app.character_info.details.DetailsViewModel
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 @Composable
 fun SpellsTabContent(
-    character: CharacterDto,
+    character: CharacterEntity,
     viewModel: DetailsViewModel
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
@@ -341,7 +341,7 @@ fun getSlotValue(slotString: String, index: Int): Int {
 }
 
 @Composable
-fun CastingAbilityPicker(character: CharacterDto, viewModel: DetailsViewModel) {
+fun CastingAbilityPicker(character: CharacterEntity, viewModel: DetailsViewModel) {
     var expanded by remember { mutableStateOf(false) }
     val abilities = listOf("INT", "WIS", "CHA")
 

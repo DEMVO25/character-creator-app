@@ -168,7 +168,7 @@ fun EditStatsScreen(
 
 private fun updateAbility(
     viewModel: SharedCharacterViewModel,
-    c: data.local.entity.CharacterDto,
+    c: data.local.entity.CharacterEntity,
     str: String = c.strength.toString(),
     dex: String = c.dexterity.toString(),
     con: String = c.constitution.toString(),

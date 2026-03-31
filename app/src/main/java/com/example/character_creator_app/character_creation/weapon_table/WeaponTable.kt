@@ -18,7 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import com.example.character_creator_app.R
 import com.example.character_creator_app.character_creation.shared_view_model.SharedCharacterViewModel
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 @Composable
 fun WeaponTableScreenRoute(
@@ -42,7 +42,7 @@ fun WeaponTableScreenRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeaponTableScreen(
-    characterState: CharacterDto,
+    characterState: CharacterEntity,
     onBack: () -> Unit,
     onNext: () -> Unit,
     weaponRows: List<WeaponRowState>,

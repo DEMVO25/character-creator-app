@@ -8,7 +8,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 @Entity(tableName = "characters")
-data class CharacterDto(
+data class CharacterEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String,

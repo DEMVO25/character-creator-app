@@ -14,10 +14,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.character_creator_app.R
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 @Composable
-fun StatsTabContent(character: CharacterDto) {
+fun StatsTabContent(character: CharacterEntity) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -135,7 +135,7 @@ fun SavingThrowRow(
     statKey: String,
     shortName: String,
     fullName: String,
-    character: CharacterDto
+    character: CharacterEntity
 ) {
     val profs = character.profSavingThrows.split(",").map { it.trim() }
     val isProficient = profs.contains(fullName)
@@ -166,7 +166,7 @@ fun SavingThrowRow(
     }
 }
 
-fun getModForStat(stat: String, character: CharacterDto): Int {
+fun getModForStat(stat: String, character: CharacterEntity): Int {
     return when (stat) {
         "STR" -> character.strengthMod
         "DEX" -> character.dexterityMod

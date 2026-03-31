@@ -1,6 +1,6 @@
 package com.example.character_creator_app.character_creation.weapon_table
 
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 object WeaponCalculator {
 
@@ -24,7 +24,7 @@ object WeaponCalculator {
         }
     }
 
-    fun calculateAttackBonus(character: CharacterDto, weapon: WeaponRowState): String {
+    fun calculateAttackBonus(character: CharacterEntity, weapon: WeaponRowState): String {
         val abilityMod = getAbilityModifier(character, weapon.ability)
         val proficiencyBonus = if (isProficient(character.profWeapons, weapon.weaponType)) {
             character.proficiencyBonus
@@ -36,7 +36,7 @@ object WeaponCalculator {
         return if (totalAtk >= 0) "+$totalAtk" else "$totalAtk"
     }
 
-    fun getBestAbilityMod(character: CharacterDto, abilityText: String): Int {
+    fun getBestAbilityMod(character: CharacterEntity, abilityText: String): Int {
         val text = abilityText.uppercase()
         val mods = buildList {
             if (text.contains("STR")) add(character.strengthMod)
@@ -50,7 +50,7 @@ object WeaponCalculator {
         return mods.maxOrNull() ?: 0
     }
 
-    private fun getAbilityModifier(character: CharacterDto, ability: String): Int {
+    private fun getAbilityModifier(character: CharacterEntity, ability: String): Int {
         return when (ability.uppercase()) {
             "STR" -> character.strengthMod
             "DEX" -> character.dexterityMod

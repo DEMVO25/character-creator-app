@@ -50,11 +50,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.character_creator_app.R
 import com.example.character_creator_app.character_info.details.DetailsViewModel
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 @Composable
 fun InfoTabContent(
-    character: CharacterDto,
+    character: CharacterEntity,
     viewModel: DetailsViewModel,
 ) {
 

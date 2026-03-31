@@ -20,12 +20,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.character_creator_app.R
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 
 @Composable
 fun PersonalityTabContent(
-    character: CharacterDto
+    character: CharacterEntity
 ) {
     Column(
         modifier = Modifier

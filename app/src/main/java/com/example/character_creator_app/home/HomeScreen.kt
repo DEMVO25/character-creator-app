@@ -30,7 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -43,11 +43,11 @@ fun HomeScreenRoute(
     onCharacterClick: (Int) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    val characters by viewModel.allCharacters.collectAsStateWithLifecycle(initialValue = emptyList())
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     HomeScreen(
+        uiState = uiState,
         onNavigateToCreations = onNavigateToCreations,
-        characters = characters,
         onCharacterClick = onCharacterClick,
         onDeleteCharacter = { viewModel.deleteCharacter(it) }
     )
@@ -55,12 +55,12 @@ fun HomeScreenRoute(
 
 @Composable
 private fun HomeScreen(
-    characters: List<CharacterDto>,
+    uiState: HomeViewModel.HomeUiState,
     onCharacterClick: (Int) -> Unit,
     onNavigateToCreations: () -> Unit,
-    onDeleteCharacter: (CharacterDto) -> Unit
+    onDeleteCharacter: (CharacterEntity) -> Unit
 ) {
-    var characterToDelete by remember { mutableStateOf<CharacterDto?>(null) }
+    var characterToDelete by remember { mutableStateOf<CharacterEntity?>(null) }
 
     Scaffold(
         floatingActionButton = {
@@ -77,9 +77,7 @@ private fun HomeScreen(
             androidx.compose.material3.AlertDialog(
                 onDismissRequest = { characterToDelete = null },
                 title = { Text(stringResource(R.string.home_delete_title)) },
-                text = {
-                    Text(stringResource(R.string.home_delete_confirm, character.name))
-                },
+                text = { Text(stringResource(R.string.home_delete_confirm, character.name)) },
                 confirmButton = {
                     androidx.compose.material3.TextButton(
                         onClick = {
@@ -87,10 +85,7 @@ private fun HomeScreen(
                             characterToDelete = null
                         }
                     ) {
-                        Text(
-                            text = stringResource(R.string.home_delete_action),
-                            color = MaterialTheme.colorScheme.error
-                        )
+                        Text(stringResource(R.string.home_delete_action), color = MaterialTheme.colorScheme.error)
                     }
                 },
                 dismissButton = {
@@ -101,43 +96,51 @@ private fun HomeScreen(
             )
         }
 
-        if (characters.isEmpty()) {
-            androidx.compose.foundation.layout.Box(
-                modifier = Modifier.fillMaxSize().padding(padding),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.home_welcome_title),
-                    style = MaterialTheme.typography.headlineMedium,
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(24.dp)
-                )
+        when {
+            uiState.isLoading -> {
+                androidx.compose.foundation.layout.Box(
+                    modifier = Modifier.fillMaxSize().padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    androidx.compose.material3.CircularProgressIndicator()
+                }
             }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(characters, key = { it.id }) { character ->
-                    CharacterCard(
-                        character = character,
-                        onClick = { onCharacterClick(character.id) },
-                        onDeleteClick = { characterToDelete = character }
+            uiState.characters.isEmpty() -> {
+                androidx.compose.foundation.layout.Box(
+                    modifier = Modifier.fillMaxSize().padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.home_welcome_title),
+                        style = MaterialTheme.typography.headlineMedium,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(24.dp)
                     )
+                }
+            }
+            else -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize().padding(padding),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(uiState.characters, key = { it.id }) { character ->
+                        CharacterCard(
+                            character = character,
+                            onClick = { onCharacterClick(character.id) },
+                            onDeleteClick = { characterToDelete = character }
+                        )
+                    }
                 }
             }
         }
     }
 }
-
 @Composable
 fun CharacterCard(
-    character: CharacterDto,
+    character: CharacterEntity,
     onClick: () -> Unit,
     onDeleteClick: () -> Unit
 ) {

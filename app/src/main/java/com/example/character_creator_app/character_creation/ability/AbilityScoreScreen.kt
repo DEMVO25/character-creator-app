@@ -37,7 +37,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.example.character_creator_app.R
 import com.example.character_creator_app.character_creation.shared_view_model.SharedCharacterViewModel
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 
 @Composable
@@ -175,7 +175,7 @@ fun AbilityScoreScreen(
 }
 
 
-private fun getStatValueByKey(key: String, character: CharacterDto): String {
+private fun getStatValueByKey(key: String, character: CharacterEntity): String {
     return when (key) {
         "STR" -> character.strength.toString()
         "DEX" -> character.dexterity.toString()
@@ -191,7 +191,7 @@ private fun getStatValueByKey(key: String, character: CharacterDto): String {
 private fun updateSingleStat(
     label: String,
     newValue: String,
-    current: CharacterDto,
+    current: CharacterEntity,
     vm: SharedCharacterViewModel
 ) {
     val s = if (label == "STR") newValue else current.strength.toString()

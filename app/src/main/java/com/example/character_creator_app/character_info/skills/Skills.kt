@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.character_creator_app.R
 import com.example.character_creator_app.character_info.stats.getModForStat
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 
 data class Skill(val nameKey: String, val stat: String, @StringRes val labelRes: Int)
@@ -58,7 +58,7 @@ val allCharacterSkills = listOf(
 )
 
 @Composable
-fun SkillsTabContent(character: CharacterDto) {
+fun SkillsTabContent(character: CharacterEntity) {
     val proficientSkills = remember(character.selectedSkills) {
         character.selectedSkills.split(",").map { it.trim().lowercase() }.filter { it.isNotEmpty() }
     }

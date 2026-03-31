@@ -43,12 +43,12 @@ import com.example.character_creator_app.character_creation.equipment.EffectType
 import com.example.character_creator_app.character_creation.equipment.InventoryItem
 import com.example.character_creator_app.character_creation.equipment.InventoryRow
 import com.example.character_creator_app.character_creation.equipment.ItemEffect
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun ItemsTabContent(
-    character: CharacterDto,
+    character: CharacterEntity,
     onInventoryChange: (List<InventoryItem>) -> Unit
 ) {
     val inventory = character.inventory

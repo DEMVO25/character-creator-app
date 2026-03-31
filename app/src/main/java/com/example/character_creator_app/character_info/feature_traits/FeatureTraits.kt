@@ -17,10 +17,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.character_creator_app.R
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 @Composable
-fun FeaturesTabContent(character: CharacterDto) {
+fun FeaturesTabContent(character: CharacterEntity) {
     Column(
         modifier = Modifier
             .fillMaxSize()

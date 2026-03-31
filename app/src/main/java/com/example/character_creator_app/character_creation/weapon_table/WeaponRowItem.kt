@@ -14,11 +14,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.character_creator_app.R
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 @Composable
 fun WeaponRowItem(
-    characterState: CharacterDto,
+    characterState: CharacterEntity,
     weapon: WeaponRowState,
     weaponTypes: List<String>,
     customWeaponLabel: String,

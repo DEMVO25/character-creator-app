@@ -10,7 +10,7 @@ import com.example.character_creator_app.character_info.skills.allCharacterSkill
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import data.local.dao.CharacterDao
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -34,7 +34,7 @@ class DetailsViewModel @Inject constructor(
         )
 
 
-    fun updateCharacterDetails(update: (CharacterDto) -> CharacterDto) {
+    fun updateCharacterDetails(update: (CharacterEntity) -> CharacterEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             characterState.value?.let { current ->
                 val updated = update(current)
@@ -61,7 +61,7 @@ class DetailsViewModel @Inject constructor(
         }
 
 
-    private fun getCastingMod(ability: String, char: CharacterDto): Int {
+    private fun getCastingMod(ability: String, char: CharacterEntity): Int {
         return when (ability.uppercase()) {
             "INT" -> char.intelligenceMod
             "WIS" -> char.wisdomMod
@@ -108,7 +108,7 @@ class DetailsViewModel @Inject constructor(
         return Pair(finalScore, mod)
     }
 
-    private fun calculateSkillsString(char: CharacterDto, newMods: Map<String, Int>): String {
+    private fun calculateSkillsString(char: CharacterEntity, newMods: Map<String, Int>): String {
 
         val proficientSkills = char.selectedSkills.split(",")
             .map { it.trim() }

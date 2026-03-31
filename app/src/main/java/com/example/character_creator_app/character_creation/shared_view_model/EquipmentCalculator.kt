@@ -3,11 +3,11 @@ package com.example.character_creator_app.character_creation.shared_view_model
 import com.example.character_creator_app.character_creation.equipment.EffectType
 import com.example.character_creator_app.character_creation.equipment.InventoryItem
 import com.example.character_creator_app.character_creation.equipment.StatType
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 object EquipmentCalculator {
 
-    fun calculateArmorClass(character: CharacterDto): Int {
+    fun calculateArmorClass(character: CharacterEntity): Int {
         val baseDexMod = character.dexterityMod
         val acBonus = getEquipmentBonus(character.inventory, EffectType.AC_BONUS)
         return 10 + baseDexMod + acBonus
@@ -15,7 +15,7 @@ object EquipmentCalculator {
 
 
 
-    private fun getBaseStat(statType: StatType, character: CharacterDto): Int {
+    private fun getBaseStat(statType: StatType, character: CharacterEntity): Int {
         return when (statType) {
             StatType.STR -> character.strength
             StatType.DEX -> character.dexterity
@@ -62,7 +62,7 @@ object EquipmentCalculator {
 
     fun calculateFinalStat(
         statType: StatType,
-        character: CharacterDto,
+        character: CharacterEntity,
         customInventory: List<InventoryItem>? = null
     ): Int {
         val baseValue = getBaseStat(statType, character)

@@ -1,6 +1,6 @@
 package com.example.character_creator_app.character_creation.shared_view_model
 
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 object SkillCalculator {
 
@@ -32,7 +32,7 @@ object SkillCalculator {
         return skillAbilityMap[skillName.lowercase().replace(" ", "_")] ?: ""
     }
 
-    fun getModifierForSkill(skillName: String, character: CharacterDto): Int {
+    fun getModifierForSkill(skillName: String, character: CharacterEntity): Int {
         val ability = getAbilityForSkill(skillName)
         return when (ability) {
             "STR" -> character.strengthMod
@@ -44,12 +44,12 @@ object SkillCalculator {
         }
     }
 
-    fun calculateSkillBonus(skillName: String, character: CharacterDto, isProficient: Boolean): Int {
+    fun calculateSkillBonus(skillName: String, character: CharacterEntity, isProficient: Boolean): Int {
         val baseMod = getModifierForSkill(skillName, character)
         return if (isProficient) baseMod + character.proficiencyBonus else baseMod
     }
 
-    fun calculateSkillsString(character: CharacterDto, selectedSkills: Set<String>): String {
+    fun calculateSkillsString(character: CharacterEntity, selectedSkills: Set<String>): String {
         val normalizedSelected = selectedSkills.map { it.lowercase().trim() }.toSet()
         return allSkillsKeys.joinToString(",") { key ->
             val isProficient = normalizedSelected.contains(key)

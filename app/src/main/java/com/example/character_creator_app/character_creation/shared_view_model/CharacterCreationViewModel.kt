@@ -11,7 +11,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import data.local.dao.CharacterDao
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 import data.models.ClassDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -251,9 +251,9 @@ class SharedCharacterViewModel @Inject constructor(
     }
 
     private fun updateStatsWithEquipment(
-        character: CharacterDto,
+        character: CharacterEntity,
         inventory: List<InventoryItem>
-    ): CharacterDto {
+    ): CharacterEntity {
 
         val fStr = EquipmentCalculator.calculateFinalStat(StatType.STR, character, inventory)
         val fDex = EquipmentCalculator.calculateFinalStat(StatType.DEX, character, inventory)
@@ -317,10 +317,10 @@ class SharedCharacterViewModel @Inject constructor(
     }
 
     private fun updateSkillsForProficiencyChange(
-        character: CharacterDto,
+        character: CharacterEntity,
         proficiencyDiff: Int,
         newProficiency: Int
-    ): CharacterDto {
+    ): CharacterEntity {
         val currentSkillsMap = SkillCalculator.parseSkillsString(character.skillsValues)
             .toMutableMap()
 
@@ -396,7 +396,7 @@ class SharedCharacterViewModel @Inject constructor(
         }
     }
 
-    fun updateCharacterDetails(update: (CharacterDto) -> CharacterDto) {
+    fun updateCharacterDetails(update: (CharacterEntity) -> CharacterEntity) {
         _characterState.update { current ->
             val updated = update(current)
             val finalWithAc = updated.copy(
@@ -408,7 +408,7 @@ class SharedCharacterViewModel @Inject constructor(
         }
     }
 
-    private fun saveToDatabase(character: CharacterDto) {
+    private fun saveToDatabase(character: CharacterEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             val newId = dao.upsertCharacter(character)
             if (character.id == 0) {
@@ -418,7 +418,7 @@ class SharedCharacterViewModel @Inject constructor(
     }
 
 
-    private fun recalculateCharacterStats(character: CharacterDto): CharacterDto {
+    private fun recalculateCharacterStats(character: CharacterEntity): CharacterEntity {
         val selectedSkills = character.selectedSkills.split(",")
             .filter { it.isNotBlank() }
             .toSet()
@@ -466,7 +466,7 @@ class SharedCharacterViewModel @Inject constructor(
         return SkillCalculator.getModifierForSkill(skillName, _characterState.value)
     }
 
-    fun getFinalStatValue(statType: StatType, state: CharacterDto, currentInventory: List<InventoryItem>): Int {
+    fun getFinalStatValue(statType: StatType, state: CharacterEntity, currentInventory: List<InventoryItem>): Int {
         val baseValue = when (statType) {
             StatType.STR -> state.strength
             StatType.DEX -> state.dexterity
@@ -497,7 +497,7 @@ class SharedCharacterViewModel @Inject constructor(
     }
 
 
-    private fun createEmptyCharacter() = CharacterDto(
+    private fun createEmptyCharacter() = CharacterEntity(
         name = "",
         characterClass = "",
         race = "",

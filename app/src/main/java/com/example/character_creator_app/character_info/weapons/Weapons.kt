@@ -17,11 +17,11 @@ import com.example.character_creator_app.R
 import com.example.character_creator_app.character_creation.weapon_table.WeaponData
 import com.example.character_creator_app.character_creation.weapon_table.WeaponRowItem
 import com.example.character_creator_app.character_creation.weapon_table.WeaponRowState
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 
 @Composable
 fun WeaponsTabContent(
-    character: CharacterDto,
+    character: CharacterEntity,
     onWeaponsChange: (List<WeaponRowState>) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -181,7 +181,7 @@ private fun EmptyWeaponsState(
 @Composable
 private fun WeaponsList(
     weapons: List<WeaponRowState>,
-    character: CharacterDto,
+    character: CharacterEntity,
     weaponTypes: List<String>,
     onWeaponUpdate: (WeaponRowState) -> Unit,
     onWeaponDelete: (WeaponRowState) -> Unit,

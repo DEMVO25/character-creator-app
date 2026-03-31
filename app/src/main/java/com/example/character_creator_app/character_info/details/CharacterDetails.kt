@@ -59,7 +59,7 @@ import com.example.character_creator_app.character_info.skills.SkillsTabContent
 import com.example.character_creator_app.character_info.spells_sheet.SpellsTabContent
 import com.example.character_creator_app.character_info.stats.StatsTabContent
 import com.example.character_creator_app.character_info.weapons.WeaponsTabContent
-import data.local.entity.CharacterDto
+import data.local.entity.CharacterEntity
 import kotlinx.coroutines.launch
 
 
@@ -133,7 +133,7 @@ val CharacterScreenSaver = androidx.compose.runtime.saveable.Saver<CharacterScre
 @Composable
 fun DetailsScreen(
     navigateToMainInfoUpdate: () -> Unit,
-    character: CharacterDto,
+    character: CharacterEntity,
     onBack: () -> Unit,
     viewModel: DetailsViewModel = hiltViewModel(),
     sharedViewModel: SharedCharacterViewModel = hiltViewModel()

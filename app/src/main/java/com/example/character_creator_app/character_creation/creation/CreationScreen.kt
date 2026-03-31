@@ -92,7 +92,8 @@ fun CreationScreen(
     var alignmentExpanded by remember { mutableStateOf(false) }
     var raceExpanded by remember { mutableStateOf(false) }
 
-    val filteredRaces = allRaces.filter { it.first.contains(characterState.race, ignoreCase = true) }
+    val filteredRaces =
+        allRaces.filter { it.first.contains(characterState.race, ignoreCase = true) }
 
     val focusManager = androidx.compose.ui.platform.LocalFocusManager.current
 
@@ -120,7 +121,7 @@ fun CreationScreen(
             ) {
                 Button(
                     onClick = onNavigateToClassOption,
-                    enabled = characterState.name.isNotBlank() && characterState.background.isNotBlank(),
+                    enabled = characterState.name.isNotBlank() && characterState.background.isNotBlank() && characterState.alignment.isNotBlank(),
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
@@ -150,7 +151,12 @@ fun CreationScreen(
             OutlinedTextField(
                 value = characterState.name,
                 onValueChange = { newName ->
-                    sharedViewModel.updateBasicInfo(newName, characterState.race, characterState.alignment, characterState.background)
+                    sharedViewModel.updateBasicInfo(
+                        newName,
+                        characterState.race,
+                        characterState.alignment,
+                        characterState.background
+                    )
                 },
                 label = { Text(stringResource(R.string.character_name_label)) },
                 singleLine = true,
@@ -168,10 +174,17 @@ fun CreationScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    modifier = Modifier.menuAnchor().fillMaxWidth(),
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth(),
                     value = characterState.race,
                     onValueChange = { newRace ->
-                        sharedViewModel.updateBasicInfo(characterState.name, newRace, characterState.alignment, characterState.background)
+                        sharedViewModel.updateBasicInfo(
+                            characterState.name,
+                            newRace,
+                            characterState.alignment,
+                            characterState.background
+                        )
                         raceExpanded = true
                     },
                     label = { Text(stringResource(R.string.race_label)) },
@@ -194,7 +207,12 @@ fun CreationScreen(
                             DropdownMenuItem(
                                 text = { Text(stringResource(resId)) },
                                 onClick = {
-                                    sharedViewModel.updateBasicInfo(characterState.name, techName, characterState.alignment, characterState.background)
+                                    sharedViewModel.updateBasicInfo(
+                                        characterState.name,
+                                        techName,
+                                        characterState.alignment,
+                                        characterState.background
+                                    )
                                     raceExpanded = false
                                 }
                             )
@@ -214,7 +232,9 @@ fun CreationScreen(
                     ?: stringResource(R.string.alignment_true_neutral)
 
                 OutlinedTextField(
-                    modifier = Modifier.menuAnchor().fillMaxWidth(),
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth(),
                     readOnly = true,
                     value = displayText,
                     onValueChange = {},
@@ -231,7 +251,12 @@ fun CreationScreen(
                         DropdownMenuItem(
                             text = { Text(stringResource(resId)) },
                             onClick = {
-                                sharedViewModel.updateBasicInfo(characterState.name, characterState.race, techName, characterState.background)
+                                sharedViewModel.updateBasicInfo(
+                                    characterState.name,
+                                    characterState.race,
+                                    techName,
+                                    characterState.background
+                                )
                                 alignmentExpanded = false
                             }
                         )
@@ -244,7 +269,12 @@ fun CreationScreen(
             OutlinedTextField(
                 value = characterState.background,
                 onValueChange = { newBg ->
-                    sharedViewModel.updateBasicInfo(characterState.name, characterState.race, characterState.alignment, newBg)
+                    sharedViewModel.updateBasicInfo(
+                        characterState.name,
+                        characterState.race,
+                        characterState.alignment,
+                        newBg
+                    )
                 },
                 label = { Text(stringResource(R.string.background_label)) },
                 singleLine = true,
