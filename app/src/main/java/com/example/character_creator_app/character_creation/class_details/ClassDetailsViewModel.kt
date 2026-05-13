@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import data.models.ClassDto
 import data.remote.ApiService
+import data.repository.ClassRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -22,10 +23,10 @@ data class ClassDetailsUiState(
 
 @HiltViewModel
 class ClassDetailsViewModel @Inject constructor(
-    @Named("Open5e") private val open5eService: ApiService
+    private val repository: ClassRepository
 ) : ViewModel() {
 
-    var uiState by mutableStateOf<ClassDetailsUiState>(ClassDetailsUiState())
+    var uiState by mutableStateOf(ClassDetailsUiState())
         private set
 
     fun fetchClassDetails(className: String) {
@@ -36,12 +37,11 @@ class ClassDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true, errorMessage = null)
             try {
-                val response = open5eService.getClassDetails(classSlug)
-                if (response.isSuccessful) {
-                    uiState = uiState.copy(classDetails = response.body(), isLoading = false)
+                val details = repository.getClassDetails(classSlug)
+                if (details != null) {
+                    uiState = uiState.copy(classDetails = details, isLoading = false)
                 } else {
-                    uiState =
-                        uiState.copy(errorMessage = "Error: ${response.code()}", isLoading = false)
+                    uiState = uiState.copy(errorMessage = "Class not found", isLoading = false)
                 }
             } catch (e: Exception) {
                 uiState = uiState.copy(errorMessage = e.localizedMessage, isLoading = false)

@@ -21,6 +21,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +35,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.example.character_creator_app.R
 import com.example.character_creator_app.character_creation.shared_view_model.SharedCharacterViewModel
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -89,12 +91,26 @@ fun CreationScreen(
         )
     }
 
+    var localRace by remember(characterState.race) { mutableStateOf(characterState.race) }
+
+    LaunchedEffect(localRace) {
+        if (localRace != characterState.race) {
+            delay(500L)
+            sharedViewModel.updateBasicInfo(
+                characterState.name,
+                localRace,
+                characterState.alignment,
+                characterState.background
+            )
+        }
+    }
+
     var alignmentExpanded by remember { mutableStateOf(false) }
     var raceExpanded by remember { mutableStateOf(false) }
 
-    val filteredRaces =
-        allRaces.filter { it.first.contains(characterState.race, ignoreCase = true) }
-
+    val filteredRaces = remember(localRace) {
+        allRaces.filter { it.first.contains(localRace, ignoreCase = true) }
+    }
     val focusManager = androidx.compose.ui.platform.LocalFocusManager.current
 
     Scaffold(
@@ -177,21 +193,18 @@ fun CreationScreen(
                     modifier = Modifier
                         .menuAnchor()
                         .fillMaxWidth(),
-                    value = characterState.race,
-                    onValueChange = { newRace ->
-                        sharedViewModel.updateBasicInfo(
-                            characterState.name,
-                            newRace,
-                            characterState.alignment,
-                            characterState.background
-                        )
+                    value = localRace,
+                    onValueChange = { newText ->
+                        localRace = newText
                         raceExpanded = true
                     },
                     label = { Text(stringResource(R.string.race_label)) },
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = raceExpanded) },
                     colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
+
                     keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(
-                        imeAction = androidx.compose.ui.text.input.ImeAction.Next
+                        imeAction = androidx.compose.ui.text.input.ImeAction.Next,
+                        autoCorrect = false
                     ),
                     keyboardActions = androidx.compose.foundation.text.KeyboardActions(
                         onNext = { focusManager.moveFocus(androidx.compose.ui.focus.FocusDirection.Down) }
@@ -207,6 +220,7 @@ fun CreationScreen(
                             DropdownMenuItem(
                                 text = { Text(stringResource(resId)) },
                                 onClick = {
+                                    localRace = techName
                                     sharedViewModel.updateBasicInfo(
                                         characterState.name,
                                         techName,

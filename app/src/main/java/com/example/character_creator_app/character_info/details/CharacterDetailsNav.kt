@@ -10,7 +10,7 @@ import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Details(val characterId: Int)
+data class Details(val characterId: String)
 
 
 
@@ -31,6 +31,6 @@ fun NavGraphBuilder.detailsNavigation(
     }
 }
 
-fun NavController.navigateToDetails(builder: NavOptionsBuilder.() -> Unit = {}) {
-    navigate(Details(characterId = id), builder)
+fun NavController.navigateToDetails(characterId: String, builder: NavOptionsBuilder.() -> Unit = {}) {
+    navigate(Details(characterId = characterId), builder)
 }

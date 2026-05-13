@@ -5,14 +5,14 @@ enum class EffectType {
 }
 
 data class ItemEffect(
-    val type: EffectType,
-    val value: String,
+    val type: EffectType = EffectType.CUSTOM,
+    val value: String = "",
     val label: String = ""
 )
 
 data class InventoryItem(
     val id: String = java.util.UUID.randomUUID().toString(),
-    val name: String,
+    val name: String = "", // Додано ""
     val isEquipped: Boolean = false,
     val effects: List<ItemEffect> = emptyList()
 )

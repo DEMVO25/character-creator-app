@@ -1,8 +1,10 @@
 package com.example.character_creator_app.character_info.feature_traits
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -24,6 +26,7 @@ fun FeaturesTabContent(character: CharacterEntity) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Text(
@@ -38,7 +41,6 @@ fun FeaturesTabContent(character: CharacterEntity) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
                 .padding(bottom = 16.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
@@ -48,12 +50,11 @@ fun FeaturesTabContent(character: CharacterEntity) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
                     .padding(16.dp)
             ) {
                 if (character.featureTrait.isEmpty()) {
                     Text(
-                        text = stringResource( R.string.features_placeholder),
+                        text = stringResource(R.string.features_placeholder),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.outline,
                         fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
@@ -68,4 +69,5 @@ fun FeaturesTabContent(character: CharacterEntity) {
             }
         }
     }
+    Spacer(Modifier.height(24.dp))
 }

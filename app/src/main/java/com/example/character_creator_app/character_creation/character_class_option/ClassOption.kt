@@ -174,16 +174,16 @@ fun ClassOptionScreen(
 }
 
 
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview(showBackground = true)
-@Composable
-private fun ClassOptionPrev() {
-    ClassOptionScreen(
-        onBack = {},
-        { },
-        sharedViewModel = SharedCharacterViewModel(
-            dao = { null } as CharacterDao
-        )
-
-    )
-}
+//@SuppressLint("ViewModelConstructorInComposable")
+//@Preview(showBackground = true)
+//@Composable
+//private fun ClassOptionPrev() {
+//    ClassOptionScreen(
+//        onBack = {},
+//        { },
+//        sharedViewModel = SharedCharacterViewModel(
+//            dao = { null } as CharacterDao
+//        )
+//
+//    )
+//}

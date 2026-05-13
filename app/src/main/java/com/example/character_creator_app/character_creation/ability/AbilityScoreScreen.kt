@@ -37,6 +37,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.example.character_creator_app.R
 import com.example.character_creator_app.character_creation.shared_view_model.SharedCharacterViewModel
+import com.google.common.collect.Multimaps.index
 import data.local.entity.CharacterEntity
 
 
@@ -135,7 +136,8 @@ fun AbilityScoreScreen(
                     ("WIS" to R.string.stat_label_wis) to ("CHA" to R.string.stat_label_cha)
                 )
 
-                statResources.forEach { (stat1, stat2) ->
+                statResources.forEachIndexed { index,  (stat1, stat2) ->
+                    val isLastRow = index == statResources.size - 1
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -164,7 +166,12 @@ fun AbilityScoreScreen(
                                     sharedViewModel
                                 )
                             },
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                                    imeAction = if (isLastRow) {
+                                androidx.compose.ui.text.input.ImeAction.Done
+                            } else {
+                                androidx.compose.ui.text.input.ImeAction.Next
+                            }
                         )
                     }
                 }
@@ -209,7 +216,8 @@ fun StatBox(
     label: String,
     value: String,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    imeAction: androidx.compose.ui.text.input.ImeAction = androidx.compose.ui.text.input.ImeAction.Next
 ) {
     var textFieldValue by remember(value) {
         mutableStateOf(
@@ -248,7 +256,7 @@ fun StatBox(
             ),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
-                imeAction = androidx.compose.ui.text.input.ImeAction.Next
+                imeAction = imeAction
             ),
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),

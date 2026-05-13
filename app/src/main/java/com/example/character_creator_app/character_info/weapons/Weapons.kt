@@ -3,6 +3,8 @@ package com.example.character_creator_app.character_info.weapons
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
@@ -37,6 +39,7 @@ fun WeaponsTabContent(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         WeaponsHeader(
             onAddWeapon = { onWeaponsChange(weaponRows + WeaponRowState()) }
@@ -52,20 +55,27 @@ fun WeaponsTabContent(
         )
 
         if (weaponRows.isEmpty()) {
-            EmptyWeaponsState(modifier = Modifier.weight(1f))
+            EmptyWeaponsState(modifier = Modifier.padding(vertical = 64.dp))
         } else {
-            WeaponsList(
-                weapons = weaponRows,
-                character = character,
-                weaponTypes = weaponTypes,
-                onWeaponUpdate = { updated ->
-                    onWeaponsChange(weaponRows.map {
-                        if (it.id == updated.id) updated else it
-                    })
-                },
-                onWeaponDelete = { weaponToDelete = it },
-                modifier = Modifier.fillMaxSize()
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                weaponRows.forEach { weapon ->
+                    WeaponRowItem(
+                        characterState = character,
+                        weapon = weapon,
+                        weaponTypes = weaponTypes,
+                        customWeaponLabel = weaponTypes.first(),
+                        onUpdate = { updated ->
+                            onWeaponsChange(weaponRows.map {
+                                if (it.id == updated.id) updated else it
+                            })
+                        },
+                        onDelete = { weaponToDelete = weapon }
+                    )
+                }
+            }
         }
     }
 

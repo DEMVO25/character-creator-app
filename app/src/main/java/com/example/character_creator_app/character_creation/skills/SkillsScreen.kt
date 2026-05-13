@@ -73,7 +73,6 @@ fun SkillsScreen(
     getModifierForSkill: (String) -> Int,
     navigateToPersonality: () -> Unit
 ) {
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -114,43 +113,50 @@ fun SkillsScreen(
                 color = MaterialTheme.colorScheme.secondary
             )
 
-
-
-            Box(
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
+                    .padding(horizontal = 16.dp, vertical = 4.dp),
             ) {
-                if (skillsViewModel.isLoading.value) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
+                Box(modifier = Modifier.fillMaxSize()) {
+                    if (skillsViewModel.isLoading.value) {
+                        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                    }
 
-                skillsViewModel.errorMessage.value?.let { error ->
-                    Text(
-                        text = error,
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(skillsViewModel.skills) { skill ->
-                        val skillKey = remember(skill.name) {
-                            skill.name.lowercase().trim().replace(" ", "_")
-                        }
-                        SkillItem(
-                            skill = skill,
-                            proficiencyBonus = proficiencyBonus,
-                            isSelected = selectedSkills.contains(skillKey),
-                            abilityModifier = getModifierForSkill(skillKey),
-                            onToggle = { onSkillToggle(skillKey) }
+                    skillsViewModel.errorMessage.value?.let { error ->
+                        Text(
+                            text = error,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.align(Alignment.Center).padding(16.dp)
                         )
+                    }
+
+                    if (!skillsViewModel.isLoading.value) {
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                            items(
+                                items = skillsViewModel.skills,
+                                key = { it.name }
+                            ) { skill ->
+                                val skillKey = remember(skill.name) {
+                                    skill.name.lowercase().trim().replace(" ", "_")
+                                }
+                                SkillItem(
+                                    skill = skill,
+                                    proficiencyBonus = proficiencyBonus,
+                                    isSelected = selectedSkills.contains(skillKey),
+                                    abilityModifier = getModifierForSkill(skillKey),
+                                    onToggle = { onSkillToggle(skillKey) }
+                                )
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
+
 
 @Composable
 fun SkillItem(
@@ -186,12 +192,9 @@ fun SkillItem(
             )
 
             Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 8.dp)
+                modifier = Modifier.weight(1f).padding(horizontal = 8.dp)
             ) {
                 Text(text = skill.name, style = MaterialTheme.typography.titleMedium)
-
                 Text(
                     text = stringResource(R.string.skill_mod_label, abilityModifier),
                     style = MaterialTheme.typography.labelSmall,

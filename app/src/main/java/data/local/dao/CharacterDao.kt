@@ -13,15 +13,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CharacterDao {
 
-
-    @Update
-    suspend fun update(character: CharacterEntity)
-
-    @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
-    suspend fun insertOrUpdate(character: CharacterEntity)
-
     @Upsert
-    suspend fun upsertCharacter(character: CharacterEntity): Long
+    suspend fun upsertCharacter(character: CharacterEntity)
 
     @Delete
     suspend fun deleteCharacter(character: CharacterEntity)
@@ -29,8 +22,15 @@ interface CharacterDao {
     @Query("SELECT * FROM characters")
     fun getAllCharacters(): Flow<List<CharacterEntity>>
 
+    @Query("SELECT * FROM characters WHERE ownerId = :userId")
+    fun getCharactersForUser(userId: String): Flow<List<CharacterEntity>>
 
     @Query("SELECT * FROM characters WHERE id = :id")
-    fun getCharacterById(id: Int): Flow<CharacterEntity?>
+    fun getCharacterById(id: String): Flow<CharacterEntity?>
 
+    @Query("SELECT * FROM characters WHERE ownerId = :userId")
+    suspend fun getCharactersForUserOnce(userId: String): List<CharacterEntity>
+
+    @Query("DELETE FROM characters WHERE id = :id")
+    suspend fun deleteCharacterById(id: String)
 }

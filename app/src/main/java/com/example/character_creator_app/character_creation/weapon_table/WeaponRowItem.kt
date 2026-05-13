@@ -71,7 +71,6 @@ fun WeaponRowItem(
                 )
             }
 
-            // Attack bonus
             Text(
                 text = attackBonus,
                 modifier = Modifier.weight(0.7f),
@@ -79,7 +78,6 @@ fun WeaponRowItem(
                 style = MaterialTheme.typography.bodyMedium
             )
 
-            // Damage column
             Column(Modifier.weight(1.5f)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     EditableTextField(
@@ -103,7 +101,6 @@ fun WeaponRowItem(
                 )
             }
 
-            // Ability column
             EditableTextField(
                 value = weapon.ability,
                 onValueChange = { onUpdate(weapon.copy(ability = it.uppercase())) },
@@ -113,7 +110,6 @@ fun WeaponRowItem(
                 maxLength = 7
             )
 
-            // Delete button
             IconButton(
                 onClick = onDelete,
                 modifier = Modifier.size(40.dp)
@@ -127,7 +123,6 @@ fun WeaponRowItem(
             }
         }
 
-        // Properties field
         PropertiesField(
             properties = weapon.properties,
             onPropertiesChange = { onUpdate(weapon.copy(properties = it)) }

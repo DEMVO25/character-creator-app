@@ -67,7 +67,7 @@ fun LevelUpRoute(
         navController.getBackStackEntry<com.example.character_creator_app.character_info.details.Details>()
     }
 
-    val characterId = parentEntry.arguments?.getInt("characterId") ?: return
+    val characterId = parentEntry.arguments?.getString("characterId") ?: return
 
     val sharedViewModel: SharedCharacterViewModel = hiltViewModel(parentEntry)
 

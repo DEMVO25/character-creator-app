@@ -6,30 +6,32 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import data.remote.ApiService
+import data.repository.SkillsRepository
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
 class SkillsViewModel @Inject constructor(
-    @Named("DndApi") private val apiService: ApiService
+    private val repository: SkillsRepository
 ) : ViewModel() {
+
     val skills = mutableStateListOf<data.models.SkillsEntity>()
     val isLoading = mutableStateOf(false)
     val errorMessage = mutableStateOf<String?>(null)
+
     init {
         fetchSkills()
     }
 
     fun fetchSkills() {
-        if (skills.isNotEmpty()) return
         viewModelScope.launch {
             isLoading.value = true
             errorMessage.value = null
             try {
-                val response = apiService.getAllSkills()
+                val results = repository.getSkills()
                 skills.clear()
-                skills.addAll(response.results)
+                skills.addAll(results)
             } catch (e: Exception) {
                 errorMessage.value = "Failed to load skills: ${e.localizedMessage}"
             } finally {

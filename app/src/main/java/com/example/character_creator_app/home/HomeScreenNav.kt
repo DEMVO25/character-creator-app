@@ -13,14 +13,16 @@ data object Home
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun NavGraphBuilder.homeNavigation(
-    onNavigateToDetails: (Int) -> Unit,
+    onNavigateToDetails: (String) -> Unit,
     onNavigateToCreations: () -> Unit,
+    onLogout: ()-> Unit,
 
     ) {
     composable<Home> {
         HomeScreenRoute(
             onNavigateToCreations = onNavigateToCreations,
-            onCharacterClick = {id -> onNavigateToDetails(id)},
+            onCharacterClick = { id -> onNavigateToDetails(id) },
+            onLogout =  onLogout ,
         )
     }
 }

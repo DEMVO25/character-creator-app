@@ -15,22 +15,47 @@ import com.example.character_creator_app.level_up.home.LevelUp
 import com.example.character_creator_app.level_up.home.levelUpNavigation
 import com.example.character_creator_app.nav.utils.safeNavigate
 import com.example.character_creator_app.nav.utils.safePopBackStack
+import com.example.character_creator_app.register.Register
+import com.example.character_creator_app.register.registerNavigation
+import com.example.character_creator_app.sign_in.SignIn
+import com.example.character_creator_app.sign_in.signInNavigation
 
 
 @Composable
 fun AppNavigation(
-    navController: NavHostController = rememberNavController()
-
+    navController: NavHostController = rememberNavController(),
+    startDestination: Any,
 ) {
     NavHost(
         navController = navController,
-        startDestination = Home
+        startDestination = startDestination
     ) {
+        signInNavigation(
+            onNavigateToRegisterScreen = { navController.safeNavigate(Register) },
+            onNavigateToHomeScreen = {
+                navController.safeNavigate(Home)
+            },
+        )
+
+        registerNavigation(
+            onNavigateToHomeScreen = { navController.safeNavigate(Home) },
+            onNavigateToSignInScreen = { navController.safeNavigate(SignIn) }
+        )
+
         homeNavigation(
             onNavigateToDetails = { id ->
                 navController.safeNavigate(Details(characterId = id))
             },
-            onNavigateToCreations = {navController.safeNavigate(CharacterCreation) }
+            onNavigateToCreations = { navController.safeNavigate(CharacterCreation) },
+            onLogout = {
+                navController.safeNavigate(SignIn) {
+
+                    popUpTo(navController.graph.startDestinationId) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                }
+            }
         )
 
         detailsNavigation(

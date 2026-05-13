@@ -65,7 +65,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun DetailsScreenRoute(
-    characterId: Int,
+    characterId: String,
     onBack: () -> Unit,
     navigateToMainInfoUpdate: () -> Unit,
     detailsViewModel: DetailsViewModel = hiltViewModel(),
@@ -274,7 +274,12 @@ fun DetailsScreen(
 
                             CharacterScreen.Features -> FeaturesTabContent(character)
                             CharacterScreen.Spells -> SpellsTabContent(character, viewModel)
-                            CharacterScreen.Dice -> DiceRoller()
+                            CharacterScreen.Dice -> DiceRoller(diceCount = viewModel.diceCount,
+                                onCountChange = { viewModel.updateDiceCount(it) },
+                                selectedDie = viewModel.selectedDie,
+                                onDieChange = { viewModel.updateSelectedDie(it) },
+                                diceTypes = viewModel.diceTypes
+                            )
                         }
                     }
                 }

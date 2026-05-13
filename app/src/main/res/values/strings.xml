@@ -1,5 +1,32 @@
 <resources>
     <string name="app_name">Character Creator App</string>
+
+    <string name="error_unknown">Something went wrong. Please try again</string>
+    <string name="error_fill_all_fields">Please fill in all fields</string>
+    <string name="error_password_too_short">Password must be at least 6 characters</string>
+    <string name="error_saving_data">Error saving user data: %1$s</string>
+    <string name="error_registration_failed">Registration failed</string>
+    <string name="login_button">Sign In</string>
+    <string name="register_button">Register</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Password</string>
+    <string name="forgot_password">Forgot password?</string>
+
+    <string name="register_title">Create Account</string>
+    <string name="sign_up_button">Sign Up</string>
+    <string name="already_have_account">Already have an account? Sign In</string>
+    <string name="username_label">Username</string>
+    <string name="password_too_short">Password must be at least 6 characters</string>
+
+
+    <string name="error_login_failed">Login failed</string>
+    <string name="password_reset_success">Please check your email %s to reset your password.</string>
+    <string name="user_not_found">User with this email address not found</string>
+    <string name="empty_email_password_reset">Please enter your email to reset your password</string>
+    <string name="wanderer">Wanderer</string>
+    <string name="sign_out">Sign out</string>
+
+
     <string name="race_label">Race (Type or Choose)</string>
     <string name="character_creation_label">Character Creation</string>
     <string name="next_button_label">Next</string>

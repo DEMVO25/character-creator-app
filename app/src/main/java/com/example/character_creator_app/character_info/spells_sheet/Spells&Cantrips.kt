@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -209,44 +212,65 @@ fun SpellsTabContent(
         }
 
         Box(modifier = Modifier.weight(1f)) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(16.dp)
-            ) {
-                val currentSpells = when (selectedTabIndex) {
-                    0 -> character.cantrips
-                    1 -> character.lvl1spells
-                    2 -> character.lvl2spells
-                    3 -> character.lvl3spells
-                    4 -> character.lvl4spells
-                    5 -> character.lvl5spells
-                    6 -> character.lvl6spells
-                    7 -> character.lvl7spells
-                    8 -> character.lvl8spells
-                    9 -> character.lvl9spells
-                    else -> ""
-                }
+            val currentSpells = when (selectedTabIndex) {
+                0 -> character.cantrips
+                1 -> character.lvl1spells
+                2 -> character.lvl2spells
+                3 -> character.lvl3spells
+                4 -> character.lvl4spells
+                5 -> character.lvl5spells
+                6 -> character.lvl6spells
+                7 -> character.lvl7spells
+                8 -> character.lvl8spells
+                9 -> character.lvl9spells
+                else -> ""
+            }
 
-                if (currentSpells.isBlank()) {
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(40.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
+            if (currentSpells.isBlank()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        stringResource(R.string.spells_no_spells),
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                }
+            } else {
+
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    item {
                         Text(
-                            stringResource(R.string.spells_no_spells),
-                            color = MaterialTheme.colorScheme.outline
+                            text = if (selectedTabIndex == 0) stringResource(R.string.spells_known_cantrips)
+                            else stringResource(R.string.spells_known_level_format, selectedTabIndex),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(bottom = 4.dp)
                         )
                     }
-                } else {
-                    SpellLevelView(
-                        label = if (selectedTabIndex == 0) stringResource(R.string.spells_known_cantrips)
-                        else stringResource(R.string.spells_known_level_format, selectedTabIndex),
-                        spells = currentSpells
-                    )
+
+                    val spellList = currentSpells.split(Regex("[,\\n]")).filter { it.isNotBlank() }
+
+                    items(spellList) { spellName ->
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                            )
+                        ) {
+                            Text(
+                                text = spellName.trim(),
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(12.dp)
+                            )
+                        }
+                    }
+
+                    item { Spacer(Modifier.height(16.dp)) }
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.example.character_creator_app.character_info.details
 
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,7 +25,24 @@ class DetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val characterId: Int = checkNotNull(savedStateHandle["characterId"])
+    private val characterId: String = checkNotNull(savedStateHandle["characterId"])
+
+
+    val diceTypes = listOf(4, 6, 8, 10, 12, 20, 100)
+
+    private val _diceCount = mutableIntStateOf(1)
+    val diceCount: Int get() = _diceCount.intValue
+
+    private val _selectedDie = mutableIntStateOf(20)
+    val selectedDie: Int get() = _selectedDie.intValue
+
+    fun updateDiceCount(count: Int) {
+        _diceCount.intValue = count
+    }
+
+    fun updateSelectedDie(sides: Int) {
+        _selectedDie.intValue = sides
+    }
 
     val characterState = dao.getCharacterById(characterId)
         .stateIn(
@@ -90,7 +108,11 @@ class DetailsViewModel @Inject constructor(
     }
 
 
-    private fun calculateStatAndMod(baseScore: Int, statName: String, inventory: List<InventoryItem>): Pair<Int, Int> {
+    private fun calculateStatAndMod(
+        baseScore: Int,
+        statName: String,
+        inventory: List<InventoryItem>
+    ): Pair<Int, Int> {
         val bonus = inventory
             .filter { it.isEquipped }
             .flatMap { it.effects }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FloatingActionButton
@@ -32,6 +33,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import data.local.entity.CharacterEntity
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.ui.res.stringResource
@@ -40,7 +42,8 @@ import com.example.character_creator_app.R
 @Composable
 fun HomeScreenRoute(
     onNavigateToCreations: () -> Unit,
-    onCharacterClick: (Int) -> Unit,
+    onCharacterClick: (String) -> Unit,
+    onLogout: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -49,20 +52,56 @@ fun HomeScreenRoute(
         uiState = uiState,
         onNavigateToCreations = onNavigateToCreations,
         onCharacterClick = onCharacterClick,
-        onDeleteCharacter = { viewModel.deleteCharacter(it) }
+        onDeleteCharacter = { viewModel.deleteCharacter(it) },
+        onLogout = {
+            viewModel.signOut()
+            onLogout()
+        }
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeScreen(
+fun HomeScreen(
     uiState: HomeViewModel.HomeUiState,
-    onCharacterClick: (Int) -> Unit,
+    onCharacterClick: (String) -> Unit,
     onNavigateToCreations: () -> Unit,
+    onLogout: () -> Unit,
     onDeleteCharacter: (CharacterEntity) -> Unit
 ) {
     var characterToDelete by remember { mutableStateOf<CharacterEntity?>(null) }
 
     Scaffold(
+        topBar = {
+            androidx.compose.material3.CenterAlignedTopAppBar(
+                title = {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        uiState.userName?.let { name ->
+                            Text(
+                                text = name,
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = onLogout
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ExitToApp,
+                            contentDescription = stringResource(R.string.sign_out),
+                            tint = MaterialTheme.colorScheme.error
+                        )
+
+                    }
+                },
+                colors = androidx.compose.material3.TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
+            )
+        } ,
         floatingActionButton = {
             FloatingActionButton(onClick = onNavigateToCreations) {
                 Icon(

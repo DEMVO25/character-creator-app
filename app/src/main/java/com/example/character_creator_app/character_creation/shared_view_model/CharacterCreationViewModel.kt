@@ -7,6 +7,8 @@ import com.example.character_creator_app.character_creation.equipment.EffectType
 import com.example.character_creator_app.character_creation.equipment.InventoryItem
 import com.example.character_creator_app.character_creation.equipment.StatType
 import com.example.character_creator_app.character_creation.weapon_table.WeaponRowState
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,15 +16,24 @@ import data.local.dao.CharacterDao
 import data.local.entity.CharacterEntity
 import data.models.ClassDto
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SharedCharacterViewModel @Inject constructor(
     private val dao: CharacterDao,
+    private val firestore: FirebaseFirestore,
+    private val auth: FirebaseAuth
 ) : ViewModel() {
 
+
+    private val currentUserId: String?
+        get() = auth.currentUser?.uid
 
     private val gson = Gson()
 
@@ -41,7 +52,6 @@ class SharedCharacterViewModel @Inject constructor(
 
     private val _weaponRows = MutableStateFlow<List<WeaponRowState>>(emptyList())
     val weaponRows = _weaponRows.asStateFlow()
-
 
 
     fun updateBasicInfo(name: String, race: String, alignment: String, background: String) {
@@ -109,7 +119,6 @@ class SharedCharacterViewModel @Inject constructor(
     }
 
 
-
     fun getRecommendedStats(className: String): Map<String, String> {
         return RecommendedStats.getForClass(className)
             .mapValues { it.value.toString() }
@@ -152,7 +161,6 @@ class SharedCharacterViewModel @Inject constructor(
             recalculateCharacterStats(updatedBase)
         }
     }
-
 
 
     fun toggleSkill(skillName: String) {
@@ -293,7 +301,6 @@ class SharedCharacterViewModel @Inject constructor(
     }
 
 
-
     fun updateWeapons(newList: List<WeaponRowState>) {
         _weaponRows.value = newList
         _characterState.update { it.copy(weaponsJson = gson.toJson(newList)) }
@@ -346,8 +353,7 @@ class SharedCharacterViewModel @Inject constructor(
         )
     }
 
-
-    fun loadCharacter(characterId: Int) {
+    fun loadCharacter(characterId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val character = dao.getCharacterById(characterId).firstOrNull()
             character?.let { dbCharacter ->
@@ -361,24 +367,56 @@ class SharedCharacterViewModel @Inject constructor(
     }
 
     fun saveCharacterToDb() {
+        val userId = currentUserId ?: return
+
         viewModelScope.launch(Dispatchers.IO) {
             val characterToWrite = _characterState.updateAndGet { current ->
                 current.copy(
+                    ownerId = userId,
                     selectedSkills = _selectedSkills.value.joinToString(","),
                     selectedLanguages = _selectedLanguages.value.joinToString(","),
                     weaponsJson = gson.toJson(_weaponRows.value),
-                    armorClass = EquipmentCalculator.calculateArmorClass(current),
-                    skillsValues = SkillCalculator.calculateSkillsString(
-                        current.copy(selectedSkills = _selectedSkills.value.joinToString(",")),
-                        _selectedSkills.value
-                    )
+                    armorClass = EquipmentCalculator.calculateArmorClass(current)
                 )
             }
 
-            val newId = dao.upsertCharacter(characterToWrite)
+            dao.upsertCharacter(characterToWrite)
 
-            if (characterToWrite.id == 0) {
-                _characterState.update { it.copy(id = newId.toInt()) }
+            val type = object : TypeToken<Map<String, Any>>() {}.type
+            val finalMap: MutableMap<String, Any> = gson.fromJson(gson.toJson(characterToWrite), type)
+
+            finalMap["updatedAt"] = com.google.firebase.Timestamp.now()
+
+            firestore.collection("characters")
+                .document(characterToWrite.id)
+                .set(finalMap)
+                .addOnSuccessListener {
+                    android.util.Log.d("Firebase", "Character synced: ${characterToWrite.id}")
+                }
+        }
+    }
+
+    private fun saveToDatabase(character: CharacterEntity) {
+        val userId = currentUserId ?: return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val characterToSave = character.copy(ownerId = userId)
+
+                dao.upsertCharacter(characterToSave)
+
+                val characterMap = gson.fromJson<MutableMap<String, Any>>(
+                    gson.toJson(characterToSave),
+                    object : TypeToken<MutableMap<String, Any>>() {}.type
+                )
+                characterMap["updatedAt"] = com.google.firebase.Timestamp.now()
+
+                firestore.collection("characters")
+                    .document(characterToSave.id)
+                    .set(characterMap)
+
+            } catch (e: Exception) {
+                android.util.Log.e("Database", "Error saving", e)
             }
         }
     }
@@ -407,16 +445,6 @@ class SharedCharacterViewModel @Inject constructor(
             finalWithAc
         }
     }
-
-    private fun saveToDatabase(character: CharacterEntity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val newId = dao.upsertCharacter(character)
-            if (character.id == 0) {
-                _characterState.update { it.copy(id = newId.toInt()) }
-            }
-        }
-    }
-
 
     private fun recalculateCharacterStats(character: CharacterEntity): CharacterEntity {
         val selectedSkills = character.selectedSkills.split(",")
@@ -466,7 +494,11 @@ class SharedCharacterViewModel @Inject constructor(
         return SkillCalculator.getModifierForSkill(skillName, _characterState.value)
     }
 
-    fun getFinalStatValue(statType: StatType, state: CharacterEntity, currentInventory: List<InventoryItem>): Int {
+    fun getFinalStatValue(
+        statType: StatType,
+        state: CharacterEntity,
+        currentInventory: List<InventoryItem>
+    ): Int {
         val baseValue = when (statType) {
             StatType.STR -> state.strength
             StatType.DEX -> state.dexterity

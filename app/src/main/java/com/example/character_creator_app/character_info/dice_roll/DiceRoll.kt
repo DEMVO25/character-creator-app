@@ -5,6 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -12,32 +13,35 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.InputChip
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
@@ -52,21 +56,26 @@ import kotlin.math.sqrt
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun DiceRoller() {
-    val diceTypes = listOf(4, 6, 8, 10, 12, 20, 100)
-    var diceCount by remember { mutableIntStateOf(1) }
+fun DiceRoller(
+    diceCount: Int,
+    onCountChange: (Int) -> Unit,
+    selectedDie: Int,
+    onDieChange: (Int) -> Unit,
+    diceTypes: List<Int>
+) {
     var rollResults by remember { mutableStateOf<List<Int>>(emptyList()) }
-    var selectedDie by remember { mutableStateOf(20) }
+    var isPlaying by remember { mutableStateOf(false) }
 
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.dice_animation))
-    var isPlaying by remember { mutableStateOf(false) }
     val progress by animateLottieCompositionAsState(
         composition = composition,
         isPlaying = isPlaying,
         restartOnPlay = true,
         speed = 1.5f
     )
+
     val haptic = androidx.compose.ui.platform.LocalHapticFeedback.current
+
     val rollDice = {
         if (!isPlaying) {
             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -76,39 +85,15 @@ fun DiceRoller() {
     }
 
     LaunchedEffect(progress) {
-        if (progress == 1f) isPlaying = false
+        if (progress == 1f) {
+            isPlaying = false
+            haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+        }
     }
 
     rememberShakeDetector { rollDice() }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            stringResource(R.string.dice_roller_label),
-            style = MaterialTheme.typography.headlineMedium
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = stringResource(R.string.dice_amount_label),
-                style = MaterialTheme.typography.bodyLarge
-            )
-            (1..5).forEach { amount ->
-                FilterChip(
-                    selected = diceCount == amount,
-                    onClick = { diceCount = amount },
-                    label = { Text(amount.toString()) },
-                    modifier = Modifier.padding(horizontal = 4.dp)
-                )
-            }
-        }
-
+    Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -118,47 +103,30 @@ fun DiceRoller() {
             verticalArrangement = Arrangement.Center
         ) {
             FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 val cubesToShow =
                     if (isPlaying) diceCount else (if (rollResults.isEmpty()) 1 else rollResults.size)
+
                 repeat(cubesToShow) { index ->
-                    Box(
-                        modifier = Modifier
-                            .size(110.dp)
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) {
-                                rollDice()
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        LottieAnimation(
-                            composition = composition,
-                            progress = if (isPlaying) progress else 1f,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .alpha(if (isPlaying) 1f else 0.7f)
-                        )
-                        if (!isPlaying && rollResults.isNotEmpty()) {
-                            val result = rollResults.getOrNull(index) ?: 0
-                            Text(
-                                text = result.toString(),
-                                style = MaterialTheme.typography.headlineLarge,
-                                color = if (result == selectedDie) Color(0xFFFFD700) else MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    }
+                    DiceBox(
+                        result = rollResults.getOrNull(index),
+                        isPlaying = isPlaying,
+                        progress = progress,
+                        composition = composition,
+                        maxVal = selectedDie,
+                        onClick = { rollDice() }
+                    )
                 }
             }
 
             if (!isPlaying && rollResults.size > 1) {
-                val total = rollResults.sum()
                 Text(
-                    text = stringResource(R.string.dice_total_label, total),
+                    text = stringResource(R.string.dice_total_label, rollResults.sum()),
                     style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.secondary,
                     modifier = Modifier.padding(top = 16.dp)
@@ -166,31 +134,66 @@ fun DiceRoller() {
             }
         }
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.surfaceContainerLow,
+            tonalElevation = 2.dp,
+            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
         ) {
-            HorizontalDivider(modifier = Modifier.padding(bottom = 12.dp))
-            Text(
-                stringResource(R.string.select_dice),
-                style = MaterialTheme.typography.labelLarge
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.fillMaxWidth()
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                diceTypes.forEach { sides ->
-                    InputChip(
-                        selected = selectedDie == sides,
-                        onClick = {
-                            selectedDie = sides
-                            rollDice()
-                        },
-                        label = { Text(stringResource(R.string.dice_sides_label, sides)) }
-                    )
+                Text(
+                    text = stringResource(R.string.dice_amount_label).uppercase(),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                    val options = listOf(1, 2, 3, 4, 5)
+                    options.forEachIndexed { index, amount ->
+                        SegmentedButton(
+                            shape = SegmentedButtonDefaults.itemShape(
+                                index = index,
+                                count = options.size
+                            ),
+                            onClick = {
+                                onCountChange(amount)
+                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                            },
+                            selected = diceCount == amount,
+                            label = { Text(amount.toString()) }
+                        )
+                    }
+                }
+
+                Text(
+                    text = stringResource(R.string.select_dice).uppercase(),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+
+                    horizontalArrangement = Arrangement.spacedBy(
+                        12.dp,
+                        Alignment.CenterHorizontally
+                    ),
+                    contentPadding = PaddingValues(horizontal = 8.dp)
+                ) {
+                    items(diceTypes) { sides ->
+                        DiceTypeTile(
+                            sides = sides,
+                            isSelected = selectedDie == sides,
+                            onClick = {
+                                onDieChange(sides)
+                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -198,12 +201,74 @@ fun DiceRoller() {
 }
 
 @Composable
+fun DiceTypeTile(sides: Int, isSelected: Boolean, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(16.dp)
+    Surface(
+        modifier = Modifier
+            .size(64.dp)
+            .clip(shape)
+            .clickable { onClick() },
+        shape = shape,
+        color = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant.copy(
+            alpha = 0.5f
+        ),
+        border = if (isSelected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            Text(
+                text = "d$sides",
+                style = MaterialTheme.typography.titleMedium,
+                color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+fun DiceBox(
+    result: Int?,
+    isPlaying: Boolean,
+    progress: Float,
+    composition: com.airbnb.lottie.LottieComposition?,
+    maxVal: Int,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(100.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        LottieAnimation(
+            composition = composition,
+            progress = if (isPlaying) progress else 1f,
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(if (isPlaying) 1f else 0.6f)
+        )
+        if (!isPlaying && result != null) {
+            Text(
+                text = result.toString(),
+                style = MaterialTheme.typography.headlineLarge,
+                color = if (result == maxVal) Color(0xFFFFD700) else MaterialTheme.colorScheme.primary
+            )
+        }
+    }
+}
+
+@Composable
 fun rememberShakeDetector(onShake: () -> Unit) {
     val context = LocalContext.current
-    val sensorManager =
-        remember { context.getSystemService(Context.SENSOR_SERVICE) as SensorManager }
+    val currentOnShake by rememberUpdatedState(onShake)
 
-    DisposableEffect(Unit) {
+    val sensorManager = remember {
+        context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    }
+
+    DisposableEffect(sensorManager) {
         val listener = object : SensorEventListener {
             private var lastShakeTime: Long = 0
 
@@ -218,7 +283,7 @@ fun rememberShakeDetector(onShake: () -> Unit) {
                     val currentTime = System.currentTimeMillis()
                     if (currentTime - lastShakeTime > 500) {
                         lastShakeTime = currentTime
-                        onShake()
+                        currentOnShake()
                     }
                 }
             }
