@@ -16,7 +16,8 @@
 * **Automated Calculations:** Real-time computation of modifiers, saving throws, and skill bonuses based on character attributes.
 * **Character Management:** Create, store, and manage multiple character profiles with ease.
 * **Modern UI/UX:** Fully declarative interface built with **Jetpack Compose**, featuring smooth **Lottie** animations and **Material 3** design.
-* **Persistence:** All data is saved locally, ensuring offline access to your character sheets at any time.
+* **Cloud Sync & Auth:** Secure user authentication via **Firebase Auth** and real-time character data synchronization with **Firestore**. 
+* **Offline-First & Persistence**: Robust data management using **Room** for local storage, ensuring 100% offline functionality with background cloud synchronization.
 
 ## Tech Stack
 The project follows modern Android development standards and best practices:
@@ -28,14 +29,33 @@ The project follows modern Android development standards and best practices:
 * **Networking:** [Retrofit 2](https://square.github.io/retrofit/) & OkHttp
 * **Architecture:** **MVVM** + **Clean Architecture** (Data, Domain, and UI layers)
 * **Libraries:** Lottie Animations, Accompanist (System UI Controller), Navigation Compose, KSP.
+* **Backend/Cloud:** Firebase (Authentication, Firestore Cloud Database).
 
 ## Architecture
 This project implements **Clean Architecture** principles to ensure scalability and maintainability:
-* **Data Layer:** Handles Room database operations and API communication.
+* **Data Layer:** Manages data coordination between the local Room database and Firebase Firestore using the Repository Pattern.
 * **Domain Layer:** Contains pure business logic and Use Cases (e.g., `CalculateStatUseCase`).
-* **UI Layer:** Utilizes ViewModels to expose state via **StateFlow** to the Compose UI.
+* **UI Layer:** Built with Jetpack Compose, following the MVVM pattern to observe state via StateFlow.
 
-## Installation
+## Installation & Setup
 1. Clone the repository:
    ```bash
    git clone [https://github.com/mvoitovych/character-creator-app.git](https://github.com/mvoitovych/character-creator-app.git)
+2. Firebase Configuration:
+   **Create a Project:** Go to the [Firebase Console](https://console.firebase.google.com/) and create a new project.
+   **Register Android App:** * Click the Android icon to add an app.
+   * Use your project's package name (found in `AndroidManifest.xml`).
+   **Add Configuration File:** * Download the `google-services.json` file.
+   * Place it in the following directory:
+   ```text
+   CharacterCreatorApp/
+   └── app/
+       └── google-services.json  <-- Place here
+* **Enable Services:** In the Firebase Console, enable the following:
+   * **Authentication:** Go to *Build > Authentication* and enable the **Email/Password** provider.
+   * **Firestore Database:** Go to *Build > Firestore Database* and click **Create Database** (start in Test Mode).
+
+3. **🚀 Build & Run:**
+   * Open the project in **Android Studio**.
+   * Wait for the IDE to index files, then click **Sync Project with Gradle Files** (the elephant icon 🐘).
+   * Select your device or emulator and press **Run (Shift + F10)**.
